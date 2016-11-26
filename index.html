@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!--
+  <script>
+    document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
+    ':35729/livereload.js?snipver=1"></' + 'script>')
+  </script>
+-->
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Dosis">
+  <link href="static/css/style.css" rel="stylesheet" type="text/css">
+  <script src="static/js/web3.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Trustless Credential Verification</h1>
+    <div class="col">
+	<h3>How does this work?</h3>
+	<p>This application computes and stores the sha256 hash of the provided document on the Ethereum blockchain. You can provide a previously signed document to verify its authenticity.</p>
+    </div>
+    <div class="col">
+      <div class="file-drop">
+<!--
+        <p>
+          drop file here
+        </p>
+-->    
+    <input id="file-input" type="file" name="file" >
+	<img id="loading" src="static/yellow-loading-wheel.gif" style="display: none">
+	<p id="sending" style="color: orange; display:none;">Sending to secure Blockchain...</p>
+	<img id="redx" src="static/redx.png" style="width:190px; height:180">
+	<p id="error" style="color: red; display:none;">Could not validate the authenticity of this document</p>
+	<img id="greencheck" src="static/greencheck.png" style="width:190px; height:180">
+	<p id="success" style="color: green; display:none;">Document authenticity verified</p>
+      </div>
+    </div>
+    <div class="action">
+    	<button id="sign-button" href="#" class="button"/>Sign Document</button> <br>
+	<input id="password" type="password" style="display:none; width: 170px" placeholder="Enter signing passphrase">
+  </div>
+	<p style="clear: both">Validator address: <a href="https://testnet.etherscan.io/address/0xf4f5f2d52150b71fe4ba0821ac334e0261a63b68">0xf4f5f2d52150b71fe4ba0821ac334e0261a63b68</a></p>
+    </div>
+  <script src="static/js/hashfile.js"></script>
+  <script src="static/js/app.js"></script>
+</body>
+</html>
