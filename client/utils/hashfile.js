@@ -22,6 +22,7 @@ export function hashFile(file){
 		    arrayBuffer = result.target.result;
 		    crypto.subtle.digest('SHA-256', arrayBuffer).then(function(result){
 			var hash = toHex(result);
+      console.log(hash);
 			resolve(hash);
 		    });
 		}
@@ -30,4 +31,3 @@ export function hashFile(file){
         fileReader.readAsArrayBuffer(file);
 	return promise;
 }
-

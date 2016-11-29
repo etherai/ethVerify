@@ -4,11 +4,11 @@ var Web3 = require('web3');
 var web3 = new Web3();
 web3.setProvider(new web3.providers.HttpProvider(RPC_ENDPOINT));
 
-var tcvc = web3.eth.contract([{"constant":false,"inputs":[{"name":"documentHash","type":"uint256"}],"name":"storeCredential","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"documentHash","type":"uint256"}],"name":"validateCredential","outputs":[{"name":"valid","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"documentHash","type":"uint256"}],"name":"invalidateCredential","outputs":[],"payable":false,"type":"function"},{"payable":false,"type":"fallback"}]).at(CONTRACT_ADDRESS);
+var tcvc = web3.eth.contract([{"constant":false,"inputs":[{"name":"hash","type":"uint256"}],"name":"addCredential","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"credentials","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"}]).at(CONTRACT_ADDRESS);
 
 (function() {
 
-	var data = {};	
+	var data = {};
 	var signButton = document.getElementById("sign-button");
 	var fileInput = document.getElementById("file-input");
 	var redx = document.getElementById("redx");
@@ -50,7 +50,7 @@ var tcvc = web3.eth.contract([{"constant":false,"inputs":[{"name":"documentHash"
 		fileInput.style.display = "none";
 		signButton.style.display = "none";
 		password.style.display = "none";
-		
+
 		web3.personal.unlockAccount(web3.eth.accounts[0], password.value,
 		function(err){
 			if(err){
@@ -63,8 +63,8 @@ var tcvc = web3.eth.contract([{"constant":false,"inputs":[{"name":"documentHash"
 				password.style.display = "inline";
 				password.value = "";
 				return;
-			}	
-			var txId = tcvc.storeCredential("0x"+data.hash, {from:web3.eth.accounts[0]});
+			}
+			var txId = tcvc.addCredential("0x"+data.hash, {from:web3.eth.accounts[0]});
 			setTimeout(function() {
 				window.open('https://testnet.etherscan.io/tx/'+txId);
 			}, 5000);
@@ -75,7 +75,7 @@ var tcvc = web3.eth.contract([{"constant":false,"inputs":[{"name":"documentHash"
 
 	function isAuthentic(hash) {
 		var promise = new Promise(function(resolve, reject) {
-			resolve(tcvc.validateCredential("0x"+hash).toNumber());
+			resolve(tcvc.credentials.call("0x"+hash);
 		});
 		return promise;
 	}
@@ -93,19 +93,19 @@ var tcvc = web3.eth.contract([{"constant":false,"inputs":[{"name":"documentHash"
 				if (valid) {
 					greencheck.style.display = "inline";
 					success.style.display = "block";
-					
+
 				}
 				else {
 					redx.style.display = "inline";
 					error.style.display = "block";
 					signButton.style.display = "inline";
 					password.style.display = "inline";
-				}	
+				}
 			});
 		});
 	}
 
 	signButton.addEventListener('click', signButtonClicked, false);
 	fileInput.addEventListener('change', fileInputChanged, false);
-	
+
 })();
