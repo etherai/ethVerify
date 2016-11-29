@@ -43,7 +43,6 @@ var tcvc = web3.eth.contract([{"constant":false,"inputs":[{"name":"documentHash"
 	}
 
 	function signButtonClicked(e) {
-		console.log('clicked?')
 		loading.style.display = "inline";
 		sending.style.display = "block";
 		redx.style.display = "none";

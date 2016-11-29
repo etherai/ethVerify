@@ -13,6 +13,10 @@ app.get('/', function (req, res) {
   res.render('index', { bundlePath });
 });
 
-console.log('restart', 'environment: ', process.env.NODE_ENV);
+app.listen(3000, err => {
+  if (err) {
+    return console.log(err);
+  }
 
-app.listen(3000);
+  console.log('server running on port 3000')
+});

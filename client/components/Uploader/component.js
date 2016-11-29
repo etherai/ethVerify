@@ -11,7 +11,7 @@ export default class Uploader extends Component {
   render () {
     return (
       <div className="container">
-        <h1>Trustless Credential Verifications</h1>
+        <h1>Trustless Credential Verification</h1>
 
         <div className="col">
           <h3>How does this work?</h3>

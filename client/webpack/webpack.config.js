@@ -2,8 +2,8 @@ const webpack       = require('webpack'),
       path          = require('path'),
       isDevelopment = process.env.NODE_ENV === 'development',
       devEntry      = [
-        'webpack/hot/only-dev-server',
         'webpack-dev-server/client?http://localhost:3001',
+        'webpack/hot/only-dev-server',
         'babel-polyfill',
         path.join(__dirname,'../index.js')
       ];
@@ -12,12 +12,13 @@ module.exports = {
   context : __dirname,
   devtool : isDevelopment && 'source-map',
   entry   : isDevelopment ? devEntry : '../index.js',
-  output: {
-    path     : path.join(__dirname, '../dist/'),
-    filename : 'bundle.js'
+  output  : {
+    path       : path.join(__dirname, '../dist/'),
+    publicPath : 'http://localhost:3001/', // this will prob need to change for prod
+    filename   : 'bundle.js'
   },
-  module: {
-    loaders: [
+  module : {
+    loaders : [
       {
         test    : /\.js$/,
         exclude : /node_modules/,
@@ -25,7 +26,10 @@ module.exports = {
       }
     ]
   },
-  plugins: isDevelopment && [
+  devServer : {
+    inline : true
+  },
+  plugins : isDevelopment && [
     new webpack.HotModuleReplacementPlugin()
   ]
 };

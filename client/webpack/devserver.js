@@ -1,16 +1,16 @@
 const webpack          = require('webpack'),
       WebpackDevServer = require('webpack-dev-server'),
       config           = require('./webpack.config.js'),
-      compiler         = webpack(config);
+      devServerConfig  = {
+        hot : true,
+        noInfo: true
+      },
+      devServer = new WebpackDevServer(webpack(config), devServerConfig);
 
-new WebpackDevServer(compiler, {
-  publicPath         : 'http://localhost:3001/',
-  hot                : true,
-  historyApiFallback : true
-}).listen(3001, '0.0.0.0', function (err) {
+devServer.listen(3001, err => {
   if (err) {
     return console.log(err);
   }
 
-  console.log('Listening at http://localhost:3001/');
+  console.log('webpack dev server running on port 3001');
 });
