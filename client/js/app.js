@@ -50,6 +50,7 @@ var tcvc = web3.eth.contract([{"constant":false,"inputs":[{"name":"documentHash"
 		fileInput.style.display = "none";
 		signButton.style.display = "none";
 		password.style.display = "none";
+		
 		web3.personal.unlockAccount(web3.eth.accounts[0], password.value,
 		function(err){
 			if(err){

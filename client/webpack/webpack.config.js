@@ -23,11 +23,14 @@ module.exports = {
         test    : /\.js$/,
         exclude : /node_modules/,
         loaders : ['react-hot', 'babel?presets[]=es2015,presets[]=react']
-      }
+      },
+      { test: /\.json$/, loader: 'json' }
     ]
   },
-  devServer : {
-    inline : true
+  resolve : {
+    alias : {
+      utils : path.join(__dirname, '../utils')
+    }
   },
   plugins : isDevelopment && [
     new webpack.HotModuleReplacementPlugin()
