@@ -1,39 +1,44 @@
 import React, { Component } from 'react';
-import uploadFile from './uploadFile';
+import { getHash, isAuthentic, sign } from './uploadFile';
 
 export default class Uploader extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      isUploading   : false,
-      hasError      : false,
-      isUploadValid : false,
-      hash          : null
+      isUploading       : false,
+      isUploadAuthentic : false,
+      hash              : null,
+      password          : 'password'
     };
   }
 
   onFileInputChange (e) {
     const file = e.target.files[0];
     this.setState({ isUploading : true });
-    uploadFile(file)
+    getHash(file)
       .then(hash => {
         this.setState({
           hash,
-          isUploading : false,
-          isUploadValid : true
+          isUploading       : false,
+          isUploadAuthentic : isAuthentic(hash)
         });
-      })
-      .catch((...args) => {
-        this.setState({
-          isUploading : false,
-          hasError    : true
+      });
+  }
+
+  onSignClick () {
+    const { hash, password } = this.state;
+    this.setState({ isUploading : true });
+    sign(hash, password)
+      .then(() => {
+        this.setState({ 
+          isUploading       : false,
+          isUploadAuthentic : isAuthentic(hash)
         });
-        console.log('catch --> ', ...args);
       });
   }
 
   render () {
-    const { isUploading, hasError, isUploadValid } = this.state;
+    const { isUploading, isUploadAuthentic, hash } = this.state;
 
     return (
       <div className="container">
@@ -55,31 +60,51 @@ export default class Uploader extends Component {
                 <p style = {{ color: 'orange' }}>Sending to secure Blockchain...</p>
               </div>
             }
-
-            { hasError && 
+            { !isUploading && !!hash &&
               <div>
-                <img src="assets/images/redx.png" style={{ width:190, height:180 }} />
-                <p style={{ color   : 'red' }}>Could not validate the authenticity of this document</p> 
-              </div>
-            }
+                { !isUploadAuthentic && 
+                  <div>
+                    <img src="assets/images/redx.png" style={{ width:190, height:180 }} />
+                    <p style={{ color : 'red' }}>Could not validate the authenticity of this document</p> 
+                  </div>
+                }
 
-            { isUploadValid && 
-              <div>
-                <img id="greencheck" src="assets/images/greencheck.png" style={{ width : 190, height:180 }} />
-                <p style={{ color: 'green' }}>Document authenticity verified</p> 
+                { isUploadAuthentic && 
+                  <div>
+                    <img id="greencheck" src="assets/images/greencheck.png" style={{ width : 190, height:180 }} />
+                    <p style={{ color : 'green' }}>Document authenticity verified</p> 
+                  </div>
+                }
               </div>
             }
 
           </div>
         </div>
 
-        <div className="action">
-          <button id="sign-button" href="#" className="button">Sign Document</button> <br/>
-          
-          <input id="password" type="password" style={{ display:'none', width: 170 }} placeholder="Enter signing passphrase" />
-          
-          <p style={{ clear: 'both' }}>Validator address: <a href="https://testnet.etherscan.io/address/0xf4f5f2d52150b71fe4ba0821ac334e0261a63b68">0xf4f5f2d52150b71fe4ba0821ac334e0261a63b68</a></p>
-        </div>
+        {
+          !!hash &&
+          <div className="action">
+            <button 
+              className = "button" 
+              onClick   = { this.onSignClick.bind(this) }>
+              Sign Document
+            </button>
+
+            <br />
+
+            <input 
+              type        = "password" 
+              style       = {{ width: 170 }} 
+              placeholder = "Enter signing passphrase" 
+            />
+
+            <p style={{ clear: 'both' }}>
+              Validator address: 
+              <a href="https://testnet.etherscan.io/address/0xf4f5f2d52150b71fe4ba0821ac334e0261a63b68">0xf4f5f2d52150b71fe4ba0821ac334e0261a63b68</a>
+            </p>
+
+          </div>
+        }
       </div>
     );
   }
