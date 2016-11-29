@@ -9,8 +9,8 @@ web3.setProvider(new web3.providers.HttpProvider(RPC_ENDPOINT));
 
 const tcvc =  web3.eth.contract([{"constant":false,"inputs":[{"name":"hash","type":"uint256"}],"name":"addCredential","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"credentials","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"}]).at(CONTRACT_ADDRESS);
 
-export function getHash (file) {
-  return hashFile(file);
+export async function getHash (file) {
+  return await hashFile(file);
 }
 
 export function sign (hash, password) {
@@ -30,8 +30,12 @@ export function sign (hash, password) {
   });
 }
 
-export function isAuthentic(hash) {
-  return tcvc.credentials.call('0x' + hash);
+export function isAuthentic (hash) {
+  return new Promise(resolve => {
+    tcvc.credentials.call('0x' + hash, (err, res) => {
+      resolve(res);
+    });
+  });
 }
 
 function pollForTx (txId, resolve, reject) {

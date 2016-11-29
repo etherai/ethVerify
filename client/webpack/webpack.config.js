@@ -22,7 +22,7 @@ module.exports = {
       {
         test    : /\.js$/,
         exclude : /node_modules/,
-        loaders : ['react-hot', 'babel?presets[]=es2015,presets[]=react']
+        loaders : ['react-hot', 'babel?presets[]=latest,presets[]=react']
       },
       { test: /\.json$/, loader: 'json' }
     ]

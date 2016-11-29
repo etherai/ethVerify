@@ -12,29 +12,30 @@ export default class Uploader extends Component {
     };
   }
 
-  onFileInputChange (e) {
-    const file = e.target.files[0];
+  async onFileInputChange (e) {
     this.setState({ isUploading : true });
-    getHash(file)
-      .then(hash => {
-        this.setState({
-          hash,
-          isUploading       : false,
-          isUploadAuthentic : isAuthentic(hash)
-        });
-      });
+
+    const file              = e.target.files[0];
+    const hash              = await getHash(file);
+    const isUploadAuthentic = await isAuthentic(hash);
+
+    this.setState({
+      hash,
+      isUploadAuthentic,
+      isUploading : false
+    });
   }
 
-  onSignClick () {
-    const { hash, password } = this.state;
+  async onSignClick () {
     this.setState({ isUploading : true });
-    sign(hash, password)
-      .then(() => {
-        this.setState({ 
-          isUploading       : false,
-          isUploadAuthentic : isAuthentic(hash)
-        });
-      });
+
+    const { hash, password } = this.state;
+    await sign(hash, password);
+
+    this.setState({ 
+      isUploading       : false,
+      isUploadAuthentic : await isAuthentic(hash)
+    });
   }
 
   render () {
