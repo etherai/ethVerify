@@ -1,4 +1,4 @@
-function toHex(buffer) {
+export function toHex(buffer) {
       var hexCodes = [];
       var view = new DataView(buffer);
       for (var i = 0; i < view.byteLength; i += 4) {
@@ -14,7 +14,7 @@ function toHex(buffer) {
         return hexCodes.join("");
 }
 
-function hashFile(file){
+export function hashFile(file){
         var arrayBuffer;
         var fileReader = new FileReader();
 	var promise = new Promise(function(resolve, reject){
